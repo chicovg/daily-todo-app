@@ -1,0 +1,46 @@
+(require '[clojure.java.jdbc :as sql])
+(sql/db-do-commands "postgresql://localhost:5432/shouter"
+                           (sql/create-table-ddl :testing [[:data :text]]))
+(sql/db-do-commands "postgresql://localhost:5432/test" (sql/create-table-ddl :test [[:data :text]]))
+exit
+(def todos [{:order 1} {:order 2}])
+(-> todos
+(map :todo))
+(-> todos
+(map _ :todo))
+(max (map todos :order))
+(max (map :order todo))
+(max (map :order todos))
+(-> todos
+(map :order))
+(-> [{:order 1} {:order 2}] (map :order))
+(def todos {1 [{:order 1} {:order 2}]}) 
+(-> (vals todos) (map :order))
+(vals todos)
+(-> (vals todos) (map #(:order %))
+)
+(-> (vals todos) (map #(:order %)))
+(--> (vals todos) (map #(:order %)))
+(->> (vals todos) (map #(:order %)))
+(->> (vals todos) (map :order))
+todos
+(def todos {1 {:order 1} 2 {:order 2}}) 
+(->> (vals todos) (map :order))
+(->> (vals todos) (map :order) (map))
+(->> (vals todos) (map :order) (max))
+(->> (vals todos) (map :order) max)
+(max 1 2)
+(->> (vals todos) (map :order) (reduce max))
+(->> (vals todos) (map :order) (reduce max) inc)
+(sort (3 2 1))
+(sort '(3 2 1))
+(doc sort)
+(def db {:a {:b 1}})
+(-> db
+(update-in [:a :b] 2)
+(update-in [:a :b] 3))
+(-> db
+(assoc-in [:a :b] 2)
+(assoc-in [:a :b] 3))
+(doc enumerate)
+(docs enumerate)
