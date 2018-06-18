@@ -73,8 +73,10 @@
 (reg-event-db
   ::update-todo
   [update-active-list]
-  (fn [db [_ todo]]
-    (assoc-todo db todo)))
+  (fn [db [_ {:keys [list-id scope id]} updates]]
+    (let [curr-todo (get-in db [:todos list-id scope id])
+          new-todo (merge curr-todo updates)]
+      (update-todo db curr-todo new-todo))))
 
 (reg-event-db
   ::delete-todo

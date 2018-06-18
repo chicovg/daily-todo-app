@@ -18,9 +18,10 @@
                        hyperlink-href]]
             [re-com.util :refer [enumerate]]
             [reagent.core :as r]
+            [cljs-time.format :refer [formatter unparse]]
+            [clojure.string :as str]
             [daily-todo-app.events :as events]
-            [daily-todo-app.subs :as subs]
-            [clojure.string :as str]))
+            [daily-todo-app.subs :as subs]))
 
 ;; general views
 (defn enter-text-input
@@ -42,15 +43,44 @@
                                       13 (save)
                                       27 (stop)
                                       nil)})])))
+(def completed-format (formatter "MMM dd"))
 
 ;; to do views
 (defn yesterday-todo-item
   []
-  (fn [{:keys [title completed]}]
-    [h-box
-       :class "list-group-item"
-       :gap "4px"
-       :children []]))
+  (fn [{:keys [id list-id scope title order completed]} mouse-over]
+    (let [mouse-over-row? (identical? @mouse-over id)]
+      [h-box
+         :class "list-group-item"
+         :gap "4px"
+         :attr {:on-mouse-over #(reset! mouse-over id)
+                :on-mouse-out #(reset! mouse-over nil)}
+         :children [[box
+                     :size "60px"
+                     :child [label
+                               :label (unparse
+                                        completed-format
+                                        completed)]]
+
+                    [box
+                     :size "auto"
+                     :child [label :label title]]
+                    [box
+                     :size "20px"
+                     :child [row-button
+                               :md-icon-name "zmdi-long-arrow-right"
+                               :tooltip "move back to today"
+                               :disabled? false
+                               :mouse-over-row? mouse-over-row?
+                               :on-click #(dispatch-sync
+                                            [::events/update-todo {:list-id list-id
+                                                                   :scope scope
+                                                                   :id id}
+                                                                  {:scope :today
+                                                                   :done false
+                                                                   :completed nil}])]]]])))
+
+
 
 (defn todo-entry
   []
@@ -97,13 +127,10 @@
                                   [checkbox
                                      :model done
                                      :on-change #(dispatch-sync
-                                                   [::events/update-todo
-                                                      {:list-id list-id
-                                                       :scope scope
-                                                       :id id
-                                                       :title title
-                                                       :order order
-                                                       :done %}])]]]
+                                                   [::events/update-todo {:list-id list-id
+                                                                          :scope scope
+                                                                          :id id}
+                                                                         {:done %}])]]]
                     [box
                        :size "auto"
                        :child (if @editing
@@ -111,16 +138,14 @@
                                    {:value title
                                     :placeholder "Enter a new value..."
                                     :on-save #(dispatch-sync
-                                                [::events/update-todo
-                                                   {:list-id list-id
-                                                    :scope scope
-                                                    :id id
-                                                    :order order
-                                                    :done done
-                                                    :title %}])
+                                                [::events/update-todo {:list-id list-id
+                                                                       :scope scope
+                                                                       :id id}
+                                                                      {:title %}])
                                     :on-stop #(reset! editing false)}]
                                 [label
-                                   :label title])]
+                                   :label title
+                                   :attr {:on-double-click #(reset! editing true)}])]
                     [h-box
                        :gap "1px"
                        :size "30px"
@@ -136,19 +161,22 @@
                                      :disabled? false
                                      :mouse-over-row? mouse-over-row?
                                      :on-click #(dispatch-sync
-                                                  [::events/delete-todo
-                                                     {:list-id list-id
-                                                      :scope scope
-                                                      :id id}])]]]]]))))
+                                                  [::events/delete-todo {:list-id list-id
+                                                                         :scope scope
+                                                                         :id id}])]]]]]))))
 
 (defn todo-list
   []
   (let [todo-list (subscribe [::subs/active-todo-list])
+        active-scope (subscribe [::subs/active-scope])
         mouse-over (r/atom nil)]
     (fn []
       [v-box
         :children (for [[_ todo first? last?] (enumerate @todo-list)]
-                    ^{:key (:id todo)} [todo-item todo mouse-over first? last?])])))
+                    ^{:key (:id todo)}
+                    (if (= :yesterday @active-scope)
+                      [yesterday-todo-item todo mouse-over]
+                      [todo-item todo mouse-over first? last?]))])))
 
 (defn list-scopes
   []

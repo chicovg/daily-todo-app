@@ -1,6 +1,8 @@
 # daily-todo-app
 
-A [re-frame](https://github.com/Day8/re-frame) application designed to ... well, that part is up to you.
+A todo application built with [re-frame](https://github.com/Day8/re-frame).
+
+I started building this app mainly so that I could get my hands wet with clojure script and re-frame.
 
 ## Development Mode
 

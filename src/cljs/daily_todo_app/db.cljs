@@ -49,14 +49,8 @@
        (reduce max 0)
        inc))
 
-;; two steps here
-;; update the todo
-;; update the one next to it
-;; find
 (defn find-with-order
   [todo-list order]
-  (.log js/console todo-list)
-  (.log js/console order)
   (->> todo-list
        (filter #(= (:order %) order))
        first))
@@ -67,8 +61,6 @@
   (let [todo-list (:active-todo-list db)
         {list-id :list-id scope :scope curr-id :id} (find-with-order todo-list current-order)
         {next-id :id} (find-with-order todo-list new-order)]
-    ;(.log js/console current-order)
-    ;(.log js/console new-order)
     (-> db
         (assoc-in [:todos list-id scope curr-id :order] new-order)
         (assoc-in [:todos list-id scope next-id :order] current-order))))
