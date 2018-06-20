@@ -3,19 +3,18 @@
 # Only use spaces to indent your .yml configuration.
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-image: clojure:lein-2.7.1
+image: cmeter/clojure-phantomjs
 clone:
   depth: full
 pipelines:
   default:
-#    - step:
-#        name: Run Tests
-#        script:
-#          - lein doo phantom test once
+    - step:
+        name: Run Tests
+        script:
+          - lein doo phantom test once
     - step:
         name: Build uberjar
         script: 
-          - lein clean
           - lein uberjar 
     - step:
         name: Deploy to Heroku
