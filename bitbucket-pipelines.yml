@@ -15,7 +15,8 @@ pipelines:
     - step:
         name: Build uberjar
         script: 
-          - lein clean uberjar 
+          - lein clean
+          - lein uberjar 
     - step:
         name: Deploy to Heroku
         deployment: production
