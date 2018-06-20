@@ -8,24 +8,24 @@
             [daily-todo-app.config :as config]))
 
 (defn insert-dev-data []
-  (def home-id (random-uuid))
+  ;(def home-id (random-uuid))
 
-  (dispatch-sync [::events/add-user-list {:id home-id :label "Home"}])
+  ;(dispatch-sync [::events/add-user-list {:id home-id :label "Home"}])
 
-  (dispatch-sync [::events/set-active-user-list home-id])
+  ;(dispatch-sync [::events/set-active-user-list home-id])
 
-  (dispatch-sync [::events/add-todo {:list-id home-id
-                                              :scope :today
-                                              :title "Build a todo app"}])
-  (dispatch-sync [::events/add-todo {:list-id home-id
-                                              :scope :today
-                                              :title "Learn re-frame"}])
-  (dispatch-sync [::events/add-todo {:list-id home-id
-                                              :scope :tomorrow
-                                              :title "Design the next app"}])
+  ;(dispatch-sync [::events/add-todo {:list-id home-id
+  ;                                            :scope :today
+  ;                                            :title "Build a todo app"}])
+  ;(dispatch-sync [::events/add-todo {:list-id home-id
+  ;                                            :scope :today
+  ;                                            :title "Learn re-frame"}])
+  ;(dispatch-sync [::events/add-todo {:list-id home-id
+  ;                                            :scope :tomorrow
+  ;                                            :title "Design the next app"}])
 
-  (def work-id (random-uuid))
-  (dispatch-sync [::events/add-user-list {:id work-id :label "Work"}]))
+  ;(def work-id (random-uuid))
+  ;(dispatch-sync [::events/add-user-list {:id work-id :label "Work"}]))
 
   ;(def completed-todos [{:id (random-uuid)
   ;                       :list-id home-id
@@ -40,7 +40,7 @@
   ;
   ;(dispatch-sync [::events/add-daily-history {:date (today-at-midnight)
   ;                                            :todos completed-todos}])
-
+)
 
 (defn dev-setup []
   (insert-dev-data)

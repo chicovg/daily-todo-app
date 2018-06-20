@@ -6,6 +6,14 @@
             [cljs-time.core :refer [now]]
             [daily-todo-app.db :refer [default-db]]))
 
+(defn set-active-panel
+  [db [_ panel]]
+  (assoc db :active-panel panel))
+
+(reg-event-db
+  ::set-active-panel
+  set-active-panel)
+
 (defn dispatch-set-active-todo-list
   [context]
   (assoc-in context [:effects :dispatch] [::set-active-todo-list]))
