@@ -8,10 +8,10 @@ clone:
   depth: full
 pipelines:
   default:
-    - step:
-        name: Run Tests
-        script:
-          - lein doo phantom test once
+#    - step:
+#        name: Run Tests
+#        script:
+#          - lein doo phantom test once
     - step:
         name: Build uberjar
         script: 
