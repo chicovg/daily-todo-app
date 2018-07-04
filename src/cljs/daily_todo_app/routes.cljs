@@ -23,6 +23,9 @@
   (defroute "/" []
     (re-frame/dispatch [::events/set-active-panel :home-panel]))
 
+  (defroute "/todos" []
+            (re-frame/dispatch [::events/set-active-panel :todo-panel]))
+
   (defroute "/about" []
     (re-frame/dispatch [::events/set-active-panel :about-panel]))
 

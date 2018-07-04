@@ -7,6 +7,11 @@
    (:name db)))
 
 (reg-sub
+  ::user
+  (fn [db]
+    (:user db)))
+
+(reg-sub
  ::active-panel ;; TODO remove
  (fn [db _]
    (:active-panel db)))

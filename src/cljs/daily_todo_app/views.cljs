@@ -45,7 +45,6 @@
                                       nil)})])))
 (def completed-format (formatter "MMM dd"))
 
-;; to do views
 (defn yesterday-todo-item
   []
   (fn [{:keys [id list-id scope title order completed]} mouse-over]
@@ -209,7 +208,8 @@
     :label "daily todo"
     :underline? true?])
 
-(defn home-panel
+; to do panel
+(defn todo-panel
   []
   [v-box
      :class "center"
@@ -219,8 +219,31 @@
                 [todo-entry]
                 [todo-list]]])
 
-;; about
+(defn sign-in-buttons
+  []
+  (let [user (subscribe [::subs/user])]
+    [v-box
+       :children [[label :label (str "Hello " (:display-name @user) "!")]
+                  [button
+                     :class "btn"
+                     :label "Sign In"
+                     :on-click #(dispatch-sync [::events/sign-in])]
+                  [button
+                     :class "btn"
+                     :label "Sign Out"
+                     :on-click #(dispatch-sync [::events/sign-out])]]]))
 
+; home panel
+(defn home-panel
+  []
+  [v-box
+     :class "center"
+     :gap "8px"
+     :children [[app-title]
+                [sign-in-buttons]]])
+
+
+;; about
 (defn about-title []
   [title
    :label "This is the About Page."
@@ -236,12 +259,12 @@
    :gap "1em"
    :children [[about-title] [link-to-home-page]]])
 
-
 ;; main
 
 (defn- panels [panel-name]
   (case panel-name
     :home-panel [home-panel]
+    :todo-panel [todo-panel]
     :about-panel [about-panel]
     [:div]))
 

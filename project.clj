@@ -14,7 +14,7 @@
                  [ring "1.4.0"]
                  [danlentz/clj-uuid "0.1.7"]
                  [org.clojure/java.jdbc "0.6.1"]
-                 [org.postgresql/postgresql "9.4-1201-jdbc41"]]
+                 [com.degel/re-frame-firebase "0.6.0"]]
 
   :plugins [[lein-cljsbuild "1.1.5"]
             [lein-garden "0.2.8"]]

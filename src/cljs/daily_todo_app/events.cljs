@@ -4,7 +4,26 @@
                                    ->interceptor
                                    debug]]
             [cljs-time.core :refer [now]]
-            [daily-todo-app.db :refer [default-db]]))
+            [daily-todo-app.db :refer [default-db]]
+            [com.degel.re-frame-firebase :as firebase]))
+
+(defn set-user
+  [db [_ user]]
+  (assoc db :user user))
+
+(reg-event-db
+  ::set-user
+  set-user)
+
+(reg-event-fx
+  ::sign-in
+  [debug]
+  (fn [_ _] {:firebase/google-sign-in nil}))
+
+(reg-event-fx
+  ::sign-out
+  [debug]
+  (fn [_ _] {:firebase/sign-out nil}))
 
 (defn set-active-panel
   [db [_ panel]]
