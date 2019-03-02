@@ -17,7 +17,7 @@
 
 (reg-event-fx
   ::sign-in
-  [debug]
+  []
   (fn [_ _] {:firebase/google-sign-in nil}))
 
 (reg-event-fx

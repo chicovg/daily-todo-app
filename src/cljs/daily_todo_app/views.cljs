@@ -222,10 +222,12 @@
 (defn sign-in-buttons
   []
   (let [user (subscribe [::subs/user])]
+    (when (not (nil? @user))
+      (dispatch-sync [::subs/active-panel :todo-panel]))
     [v-box
        :children [[label :label (str "Hello " (:display-name @user) "!")]
                   [button
-                     :class "btn"
+                     :class "btn btn-primary"
                      :label "Sign In"
                      :on-click #(dispatch-sync [::events/sign-in])]
                   [button
